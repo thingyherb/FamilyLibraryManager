@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FamilyLibraryManager</string>
+    <string name="app_name">家庭图书管理</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="test_git">test my git</string>
