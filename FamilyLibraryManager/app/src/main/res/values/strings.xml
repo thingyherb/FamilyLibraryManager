@@ -2,5 +2,6 @@
     <string name="app_name">FamilyLibraryManager</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="test_git">test my git</string>
     <string name="action_settings">Settings</string>
 </resources>
