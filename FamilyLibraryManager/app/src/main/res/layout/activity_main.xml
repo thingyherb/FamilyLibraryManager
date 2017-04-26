@@ -4,8 +4,167 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
-
-    <TextView android:text="@string/test_git" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp" >
+        <TextView
+            android:id="@+id/bookNumberTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="0dp"
+            android:text="图书编号："
+            android:textColor="#000000"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/bookNumberEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:hint="请输入图书编号"
+            android:inputType="number"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="70dp" >
+        <TextView
+            android:id="@+id/bookNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="0dp"
+            android:text="图书名称："
+            android:textColor="#000000"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/bookNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:hint="请输入图书名称"
+            android:inputType="text"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="120dp" >
+        <TextView
+            android:id="@+id/bookAuthorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="0dp"
+            android:text="图书作者："
+            android:textColor="#000000"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/bookAuthorEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:hint="请输入图书作者"
+            android:inputType="text"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="170dp" >
+        <TextView
+            android:id="@+id/bookTypeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="0dp"
+            android:text="图书类型："
+            android:textColor="#000000"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/bookTypeEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:hint="电子书/实体书"
+            android:inputType="text"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="220dp" >
+        <TextView
+            android:id="@+id/bookDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="0dp"
+            android:text="出版日期："
+            android:textColor="#000000"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/bookDateEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:hint="xxxx年xx月xx日"
+            android:inputType="text"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="270dp" >
+        <TextView
+            android:id="@+id/bookPriceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="0dp"
+            android:text="图书单价："
+            android:textColor="#000000"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/bookPriceEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:hint="请输入图书单价，单位元"
+            android:inputType="numberDecimal"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="320dp" >
+        <TextView
+            android:id="@+id/bookBorrowerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="0dp"
+            android:text="借阅人名："
+            android:textColor="#000000"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/bookBorrowerEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:hint="请输入借阅人的姓名"
+            android:inputType="text"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="370dp" >
+        <Button
+            android:id="@+id/inputButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="0dp"
+            android:text="录入"
+            android:textColor="#ffffff"
+            android:textColorHighlight="#999999"
+            android:textSize="18sp"
+            android:background="#2eaae1"
+            android:onClick="inputButtonClicked"/>
+    </LinearLayout>
 </RelativeLayout>
