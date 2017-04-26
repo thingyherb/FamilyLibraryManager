@@ -1,19 +1,42 @@
 package familylibrarymanager.zhao.com.familylibrarymanager;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.List;
+import java.util.Stack;
+
+
+public class MainActivity extends AppCompatActivity implements InputFragment.OnFragmentInteractionListener {
+
+    // Fragment管理器
+    private FragmentManager fragmentManager;
+    // fragments
+    private InputFragment inputFragment = new InputFragment();
+    private ListFragment  listFragment = new ListFragment();
+    private SearchFragment searchFragment = new SearchFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // 获取Fragment管理器
+        this.fragmentManager = this.getFragmentManager();
+        // 设置默认显示的fragment
+        this.fragmentManager.beginTransaction().replace(R.id.fragmentContainer , this.inputFragment).commit();
+        RadioButton inputButton = (RadioButton)findViewById(R.id.tabBar_firstBtn);
+        inputButton.setTextColor(Color.parseColor("#1b3afb"));
     }
 
     @Override
@@ -37,10 +60,52 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     /*
-     * 录入按钮点击事件
+     * tabBar 录入图书按钮 点击事件
      */
-    public void inputButtonClicked(View view) {
-        Toast.makeText(MainActivity.this, "录入成功", Toast.LENGTH_SHORT).show();
+    public void tabBarInputButtonClicked(View view) {
+        // 修改按钮字体颜色
+        RadioButton button = (RadioButton) view;
+        button.setTextColor(Color.parseColor("#1b3afb"));
+        RadioButton listButton = (RadioButton)findViewById(R.id.tabBar_secondBtn);
+        listButton.setTextColor(Color.parseColor("#ffffff"));
+        RadioButton searchButton = (RadioButton)findViewById(R.id.tabBar_thirdBtn);
+        searchButton.setTextColor(Color.parseColor("#ffffff"));
+        // 切换fragment
+        this.fragmentManager.beginTransaction().replace(R.id.fragmentContainer , this.inputFragment).commit();
+    }
+    /*
+     * tabBar 图书列表按钮 点击事件
+     */
+    public void tabBarListButtonClicked(View view) {
+        // 修改按钮字体颜色
+        RadioButton currentButton = (RadioButton)view;
+        currentButton.setTextColor(Color.parseColor("#1b3afb"));
+        RadioButton inputButton = (RadioButton)findViewById(R.id.tabBar_firstBtn);
+        inputButton.setTextColor(Color.parseColor("#ffffff"));
+        RadioButton searchButton = (RadioButton)findViewById(R.id.tabBar_thirdBtn);
+        searchButton.setTextColor(Color.parseColor("#ffffff"));
+        // 切换fragment
+        this.fragmentManager.beginTransaction().replace(R.id.fragmentContainer , this.listFragment).commit();
+    }
+    /*
+     * tabBar 搜索图书 点击事件
+     */
+    public void tabBarSearchButtonClicked(View view) {
+        // 修改按钮字体颜色
+        RadioButton currentButton = (RadioButton)view;
+        currentButton.setTextColor(Color.parseColor("#1b3afb"));
+        RadioButton inputButton = (RadioButton)findViewById(R.id.tabBar_firstBtn);
+        inputButton.setTextColor(Color.parseColor("#ffffff"));
+        RadioButton listButton = (RadioButton)findViewById(R.id.tabBar_secondBtn);
+        listButton.setTextColor(Color.parseColor("#ffffff"));
+        // 切换fragment
+        this.fragmentManager.beginTransaction().replace(R.id.fragmentContainer , this.searchFragment).commit();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
