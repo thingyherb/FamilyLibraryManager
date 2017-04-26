@@ -21,7 +21,7 @@ public class SQLConstant {
     public static String KEY_PUBLICATION_DATE = "publication_date";//出版时间
 
     public static final String SQL_CREATE = "create table if not exists " +
-            TABLE_BOOK + " (" + KEY_ID + " integer primary key autoincrement, " +
+            TABLE_BOOK + " (" + KEY_ID + " integer primary key , " +
             KEY_BOOK_NAME + " text not null, " + KEY_TYPE + " text not null, " + KEY_PRICE + " float, "+
             KEY_AUTHOR + " text not null, " + KEY_BORROWER + " text, " +
             KEY_PUBLICATION_DATE + " long" + ");";
