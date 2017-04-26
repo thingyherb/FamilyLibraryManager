@@ -107,12 +107,14 @@ public class DataBaseOpenHelper extends SQLiteOpenHelper {
      * @Description: 插入数据
      * @author lihy
      */
-    public void insert(String table, ContentValues contentValues) {
+    public boolean insert(String table, ContentValues contentValues) {
         DataBaseOpenHelper dataBaseOpenHelper = dbMaps.get(nowDbName);
+        long returnValue;
         synchronized (dataBaseOpenHelper) {
             SQLiteDatabase database = dataBaseOpenHelper.getWritableDatabase();
-            database.insert(table, null, contentValues);
+            returnValue = database.insert(table, null, contentValues);
         }
+        return returnValue!=-1;
     }
 
     /**
