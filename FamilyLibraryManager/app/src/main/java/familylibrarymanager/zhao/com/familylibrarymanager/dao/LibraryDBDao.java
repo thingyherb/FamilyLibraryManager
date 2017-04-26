@@ -3,6 +3,7 @@ package familylibrarymanager.zhao.com.familylibrarymanager.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class LibraryDBDao {
 
     private Context mContext;
     private DataBaseOpenHelper mDbOpenHelper;//数据库打开帮助类
+
     public LibraryDBDao(Context context) {
         mContext = context;
     }
@@ -37,13 +39,14 @@ public class LibraryDBDao {
         return mDbOpenHelper;
     }
 
-    public void resetDbOpenHelper(){
+    public void resetDbOpenHelper() {
         mDbOpenHelper = null;
         DataBaseOpenHelper.clearInstance();
     }
 
     /**
      * 获取创建数据库表语句
+     *
      * @return
      */
     private List getCreateDBSql() {
@@ -57,15 +60,22 @@ public class LibraryDBDao {
      *
      * @param book
      */
-    public void addBook(Book book) {
+    public boolean addBook(Book book) {
+        if(book==null|| TextUtils.isEmpty(String.valueOf(book.getId())))
+            return false;
+        //如果数据库中有此id 返回false
+        if(searchBook(SQLConstant.KEY_ID, String.valueOf(book.getId()))!=null){
+            return false;
+        }
         ContentValues values = new ContentValues();
+        values.put(SQLConstant.KEY_ID, book.getId());
         values.put(SQLConstant.KEY_BOOK_NAME, book.getBookname());
         values.put(SQLConstant.KEY_AUTHOR, book.getAuthor());
         values.put(SQLConstant.KEY_BORROWER, book.getBorrower());
         values.put(SQLConstant.KEY_PRICE, book.getPrice());
         values.put(SQLConstant.KEY_PUBLICATION_DATE, book.getPublicationDate());
         values.put(SQLConstant.KEY_TYPE, book.getType());
-        getDataBaseHelper().insert(SQLConstant.TABLE_BOOK, values);
+        return getDataBaseHelper().insert(SQLConstant.TABLE_BOOK, values);
     }
 
     /**
@@ -76,8 +86,8 @@ public class LibraryDBDao {
     public List<Book> queryAllBookList() {
         Cursor results = getDataBaseHelper().query(SQLConstant.TABLE_BOOK,
                 new String[]{SQLConstant.KEY_ID, SQLConstant.KEY_BOOK_NAME,
-                SQLConstant.KEY_AUTHOR, SQLConstant.KEY_BORROWER, SQLConstant.KEY_PUBLICATION_DATE,
-                SQLConstant.KEY_PRICE, SQLConstant.KEY_TYPE},
+                        SQLConstant.KEY_AUTHOR, SQLConstant.KEY_BORROWER, SQLConstant.KEY_PUBLICATION_DATE,
+                        SQLConstant.KEY_PRICE, SQLConstant.KEY_TYPE},
                 null, null, null, null, null);
         return convertToBookList(results);
     }
@@ -91,6 +101,7 @@ public class LibraryDBDao {
      */
     public void updateBookInfo(int id, Book book) {
         ContentValues values = new ContentValues();
+        values.put(SQLConstant.KEY_ID, book.getId());
         values.put(SQLConstant.KEY_BOOK_NAME, book.getBookname());
         values.put(SQLConstant.KEY_PUBLICATION_DATE, book.getPublicationDate());
         values.put(SQLConstant.KEY_TYPE, book.getType());
@@ -105,10 +116,10 @@ public class LibraryDBDao {
      * 查询图书列表
      *
      * @param columnName 字段名称，可选如下： SQLConstant.TABLE_BOOK,
-     *  SQLConstant.KEY_ID, SQLConstant.KEY_BOOK_NAME,
-     *  SQLConstant.KEY_AUTHOR, SQLConstant.KEY_BORROWER,
-     *  SQLConstant.KEY_PUBLICATION_DATE,
-     *  SQLConstant.KEY_PRICE, SQLConstant.KEY_TYPE
+     *                   SQLConstant.KEY_ID, SQLConstant.KEY_BOOK_NAME,
+     *                   SQLConstant.KEY_AUTHOR, SQLConstant.KEY_BORROWER,
+     *                   SQLConstant.KEY_PUBLICATION_DATE,
+     *                   SQLConstant.KEY_PRICE, SQLConstant.KEY_TYPE
      */
     public Book searchBook(String columnName, String columnValue) {
         Cursor results = getDataBaseHelper().query(SQLConstant.TABLE_BOOK,
@@ -116,7 +127,7 @@ public class LibraryDBDao {
                         SQLConstant.KEY_AUTHOR, SQLConstant.KEY_BORROWER,
                         SQLConstant.KEY_PUBLICATION_DATE,
                         SQLConstant.KEY_PRICE, SQLConstant.KEY_TYPE},
-                columnName + "=?" , new String[]{String.valueOf(columnValue)}, null, null, null);
+                columnName + "=?", new String[]{String.valueOf(columnValue)}, null, null, null);
         return convertToBook(results);
     }
 
