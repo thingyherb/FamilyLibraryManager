@@ -5,11 +5,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
+import android.app.Fragment;
+
+import java.sql.Date;
 
 
 /**
@@ -105,7 +110,44 @@ public class SearchFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "搜索成功", Toast.LENGTH_SHORT).show();
+                //获取输入框内容，全部为空提示异常
+                //图书编号
+                EditText bookid = (EditText)getActivity().findViewById(R.id.bookNumberEditText);
+                //图书名称
+                EditText bookname = (EditText)getActivity().findViewById(R.id.bookNameEditText);
+                String name = bookname.getText().toString();
+                //作者
+                EditText bookauth = (EditText)getActivity().findViewById(R.id.bookAuthorEditText);
+                String auth = bookauth.getText().toString();
+                //类型
+                EditText booktype = (EditText)getActivity().findViewById(R.id.bookTypeEditText);
+                String type = booktype.getText().toString();
+                //出版日期
+                EditText bookdate = (EditText) getActivity().findViewById(R.id.bookDateEditText);
+                //Date.parse(bookdate.getText().toString());
+                //单价Decimal
+                EditText bookprice= (EditText)getActivity().findViewById(R.id.bookPriceEditText);
+                String priceStr = bookprice.getText().toString();
+                Double price;
+                if("".equals(priceStr)){
+                    price = 0.0;
+                }else{
+                    price = Double.valueOf(priceStr);
+                }
+
+                //借阅人
+                EditText bookborrower= (EditText)getActivity().findViewById(R.id.bookBorrowerEditText);
+                String borrower = bookborrower.getText().toString();
+
+                //根据输入框到库中查询
+
+                //返回结果
+                Toast.makeText(getActivity(), borrower, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), price.toString(), Toast.LENGTH_SHORT).show();
+
+
+                Toast.makeText(getActivity(), "搜索00成功", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
