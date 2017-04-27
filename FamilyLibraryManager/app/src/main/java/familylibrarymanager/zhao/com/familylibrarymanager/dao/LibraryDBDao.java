@@ -4,9 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.text.TextUtils;
+import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import familylibrarymanager.zhao.com.familylibrarymanager.bean.Book;
 import familylibrarymanager.zhao.com.familylibrarymanager.constant.SQLConstant;
@@ -19,7 +24,7 @@ import familylibrarymanager.zhao.com.familylibrarymanager.utils.DataBaseOpenHelp
  * Person in charge :  zouyulong
  */
 
-public class LibraryDBDao {
+public class LibraryDBDao implements Serializable {
     public static final int SEARCHTYPE_ID = 1;
 
     private Context mContext;
@@ -39,7 +44,7 @@ public class LibraryDBDao {
         return mDbOpenHelper;
     }
 
-    public void resetDbOpenHelper() {
+    public void destoryDB() {
         mDbOpenHelper = null;
         DataBaseOpenHelper.clearInstance();
     }
@@ -64,9 +69,6 @@ public class LibraryDBDao {
         if(book==null|| TextUtils.isEmpty(String.valueOf(book.getId())))
             return false;
         //如果数据库中有此id 返回false
-        if(searchBook(SQLConstant.KEY_ID, String.valueOf(book.getId()))!=null){
-            return false;
-        }
         ContentValues values = new ContentValues();
         values.put(SQLConstant.KEY_ID, book.getId());
         values.put(SQLConstant.KEY_BOOK_NAME, book.getBookname());
@@ -99,7 +101,7 @@ public class LibraryDBDao {
      * @param book
      * @return
      */
-    public void updateBookInfo(int id, Book book) {
+    public void updateBookInfo(String id, Book book) {
         ContentValues values = new ContentValues();
         values.put(SQLConstant.KEY_ID, book.getId());
         values.put(SQLConstant.KEY_BOOK_NAME, book.getBookname());
@@ -128,6 +130,35 @@ public class LibraryDBDao {
                         SQLConstant.KEY_PUBLICATION_DATE,
                         SQLConstant.KEY_PRICE, SQLConstant.KEY_TYPE},
                 columnName + "=?", new String[]{String.valueOf(columnValue)}, null, null, null);
+        return convertToBook(results);
+    }
+
+    /**
+     * 多个查询关键字情况
+     * @param map
+     * @return
+     */
+    public Book searchBook(HashMap<String, String> map) {
+        Set set = map.keySet();
+        Iterator iterator = set.iterator();
+        StringBuffer sb = new StringBuffer();
+        ArrayList<String> valueList = new ArrayList();
+        while (iterator.hasNext()){
+            String key = (String) iterator.next();
+            sb.append(key).append("=?");
+            valueList.add(map.get(key));
+            if(iterator.hasNext()){
+                sb.append(" and ");
+            }
+        }
+        Log.d("test", "keysets" + sb.toString());
+        String[] strs = new String[valueList.size()];
+        Cursor results = getDataBaseHelper().query(SQLConstant.TABLE_BOOK,
+                new String[]{SQLConstant.KEY_ID, SQLConstant.KEY_BOOK_NAME,
+                        SQLConstant.KEY_AUTHOR, SQLConstant.KEY_BORROWER,
+                        SQLConstant.KEY_PUBLICATION_DATE,
+                        SQLConstant.KEY_PRICE, SQLConstant.KEY_TYPE},
+                sb.toString(), valueList.toArray(strs), null, null, null);
         return convertToBook(results);
     }
 
@@ -162,13 +193,13 @@ public class LibraryDBDao {
         List<Book> mBookList = new ArrayList<>();
         for (int i = 0; i < resultCounts; i++) {
             Book book = new Book();
-            book.setId(cursor.getInt(0));
+            book.setId(cursor.getString(0));
             book.setBookname(cursor.getString(cursor.getColumnIndex(SQLConstant.KEY_BOOK_NAME)));
             book.setAuthor(cursor.getString(cursor.getColumnIndex(SQLConstant.KEY_AUTHOR)));
             book.setBorrower(cursor.getString(cursor.getColumnIndex(SQLConstant.KEY_BORROWER)));
             book.setPrice(cursor.getDouble(cursor.getColumnIndex(SQLConstant.KEY_PRICE)));
             book.setType(cursor.getString(cursor.getColumnIndex(SQLConstant.KEY_TYPE)));
-            book.setPublicationDate(cursor.getLong(cursor.getColumnIndex(SQLConstant.KEY_PUBLICATION_DATE)));
+            book.setPublicationDate(cursor.getString(cursor.getColumnIndex(SQLConstant.KEY_PUBLICATION_DATE)));
             mBookList.add(book);
             cursor.moveToNext();
         }
@@ -189,13 +220,13 @@ public class LibraryDBDao {
         Book book = null;
         if (resultCounts > 0) {
             book = new Book();
-            book.setId(cursor.getInt(0));
+            book.setId(cursor.getString(0));
             book.setBookname(cursor.getString(cursor.getColumnIndex(SQLConstant.KEY_BOOK_NAME)));
             book.setAuthor(cursor.getString(cursor.getColumnIndex(SQLConstant.KEY_AUTHOR)));
             book.setBorrower(cursor.getString(cursor.getColumnIndex(SQLConstant.KEY_BORROWER)));
             book.setPrice(cursor.getDouble(cursor.getColumnIndex(SQLConstant.KEY_PRICE)));
             book.setType(cursor.getString(cursor.getColumnIndex(SQLConstant.KEY_TYPE)));
-            book.setPublicationDate(cursor.getLong(cursor.getColumnIndex(SQLConstant.KEY_PUBLICATION_DATE)));
+            book.setPublicationDate(cursor.getString(cursor.getColumnIndex(SQLConstant.KEY_PUBLICATION_DATE)));
             cursor.moveToNext();
         }
         return book;

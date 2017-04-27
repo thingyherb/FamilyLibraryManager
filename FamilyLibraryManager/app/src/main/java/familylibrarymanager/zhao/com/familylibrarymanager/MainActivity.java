@@ -1,21 +1,16 @@
 package familylibrarymanager.zhao.com.familylibrarymanager;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
-import java.util.List;
-import java.util.Stack;
+import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
 
 
 public class MainActivity extends AppCompatActivity implements InputFragment.OnFragmentInteractionListener {
@@ -23,20 +18,31 @@ public class MainActivity extends AppCompatActivity implements InputFragment.OnF
     // Fragment管理器
     private FragmentManager fragmentManager;
     // fragments
-    private InputFragment inputFragment = new InputFragment();
-    private ListFragment  listFragment = new ListFragment();
-    private SearchFragment searchFragment = new SearchFragment();
-
+    private InputFragment inputFragment;
+    private ListFragment  listFragment;
+    private SearchFragment searchFragment;
+    LibraryDBDao mDao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mDao = new LibraryDBDao(this);
+        inputFragment = InputFragment.newInstance(mDao);
+        listFragment = ListFragment.newInstance(mDao);
+        searchFragment = SearchFragment.newInstance(mDao);
         // 获取Fragment管理器
         this.fragmentManager = this.getFragmentManager();
         // 设置默认显示的fragment
         this.fragmentManager.beginTransaction().replace(R.id.fragmentContainer , this.inputFragment).commit();
         RadioButton inputButton = (RadioButton)findViewById(R.id.tabBar_firstBtn);
         inputButton.setTextColor(Color.parseColor("#1b3afb"));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mDao!=null)
+            mDao.destoryDB();
     }
 
     @Override

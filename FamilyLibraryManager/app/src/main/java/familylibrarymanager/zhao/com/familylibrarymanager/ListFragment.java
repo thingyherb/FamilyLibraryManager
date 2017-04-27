@@ -1,12 +1,18 @@
 package familylibrarymanager.zhao.com.familylibrarymanager;
 
-import android.content.Context;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.List;
+
+import familylibrarymanager.zhao.com.familylibrarymanager.bean.Book;
+import familylibrarymanager.zhao.com.familylibrarymanager.constant.IntentConstant;
+import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
 
 
 /**
@@ -18,14 +24,8 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class ListFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    //数据库操作变量
+    private LibraryDBDao mDao;
 
     private OnFragmentInteractionListener mListener;
 
@@ -37,16 +37,12 @@ public class ListFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment ListFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static ListFragment newInstance(String param1, String param2) {
+    public static ListFragment newInstance(LibraryDBDao dao) {
         ListFragment fragment = new ListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(IntentConstant.INTENT_DAO, dao);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,8 +51,7 @@ public class ListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mDao = (LibraryDBDao) getArguments().getSerializable(IntentConstant.INTENT_DAO);
         }
     }
 
@@ -67,11 +62,33 @@ public class ListFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    @Override
+    public void onResume() {
+        super.onResume();
+        traverseData();
+    }
+
+    //test 可删除
+    private void traverseData(){
+        List<Book> booklist = mDao.queryAllBookList();
+        Log.d(TAG, "size:"+(booklist==null?0:booklist.size()));
+        if(booklist!=null) {
+            for (Book book : booklist) {
+                printfBook(book);
+            }
         }
+    }
+    private String TAG = "test";
+
+    //test 可删除
+    private void printfBook(Book book){
+        Log.d(TAG, "id:"+book.getId());
+        Log.d(TAG, "name:"+book.getBookname());
+        Log.d(TAG, "author:"+book.getAuthor());
+        Log.d(TAG, "borrower:"+book.getBorrower());
+        Log.d(TAG, "type:"+book.getType());
+        Log.d(TAG, "price:"+book.getPrice());
+        Log.d(TAG, "publicationdate:"+book.getPublicationDate());
     }
 
     @Override
