@@ -10,19 +10,19 @@ package familylibrarymanager.zhao.com.familylibrarymanager.bean;
 
 public class Book {
 
-    private int id;
+    private String id;
     private String bookname;
     private String type;
     private String author;
     private double price;
     private String borrower;
-    private long publicationDate;
+    private String publicationDate;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -66,11 +66,11 @@ public class Book {
         this.borrower = borrower;
     }
 
-    public long getPublicationDate() {
+    public String getPublicationDate() {
         return publicationDate;
     }
 
-    public void setPublicationDate(long publicationDate) {
+    public void setPublicationDate(String publicationDate) {
         this.publicationDate = publicationDate;
     }
 }
