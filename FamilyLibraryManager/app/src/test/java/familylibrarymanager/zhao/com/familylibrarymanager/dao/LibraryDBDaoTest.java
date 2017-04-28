@@ -58,7 +58,7 @@ public class LibraryDBDaoTest extends InstrumentationTestCase {
         book3.setPublicationDate("2011-1-1");
         book3.setType("小说");
         book3.setPrice(33.33);
-        book3.setBorrower("李四");
+        book3.setBorrower("张三");
         book3.setAuthor("陆西星");
 
         Book book4 = new Book();
@@ -109,16 +109,15 @@ public class LibraryDBDaoTest extends InstrumentationTestCase {
     @Test
     public void testSearchBook() throws Exception {
         saveData();
-//        Book book = mDao.searchBook(SQLConstant.KEY_BOOK_NAME, "封神榜");
+//        Book book = mDao.searchBooks(SQLConstant.KEY_BOOK_NAME, "封神榜");
 //        if(book!=null)
 //            printfBook(book);
         HashMap map = new HashMap();
-        map.put(SQLConstant.KEY_BOOK_NAME, "封神榜");
-        map.put(SQLConstant.KEY_TYPE, "小说");
-        map.put(SQLConstant.KEY_PRICE, "33.33");
-        Book book2 = mDao.searchBook(map);
-        if(book2!=null)
-            printfBook(book2);
+        map.put(SQLConstant.KEY_BORROWER, "张三");
+        List<Book> bookList = mDao.searchBooks(map);
+        for (Book book : bookList) {
+            printfBook(book);
+        }
         mDao.destoryDB();
     }
 //
