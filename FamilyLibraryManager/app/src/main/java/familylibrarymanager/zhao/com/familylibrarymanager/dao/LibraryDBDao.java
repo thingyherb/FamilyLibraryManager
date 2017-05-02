@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -123,14 +122,14 @@ public class LibraryDBDao implements Serializable {
      *                   SQLConstant.KEY_PUBLICATION_DATE,
      *                   SQLConstant.KEY_PRICE, SQLConstant.KEY_TYPE
      */
-    public Book searchBook(String columnName, String columnValue) {
+    public List<Book> searchBooks(String columnName, String columnValue) {
         Cursor results = getDataBaseHelper().query(SQLConstant.TABLE_BOOK,
                 new String[]{SQLConstant.KEY_ID, SQLConstant.KEY_BOOK_NAME,
                         SQLConstant.KEY_AUTHOR, SQLConstant.KEY_BORROWER,
                         SQLConstant.KEY_PUBLICATION_DATE,
                         SQLConstant.KEY_PRICE, SQLConstant.KEY_TYPE},
                 columnName + "=?", new String[]{String.valueOf(columnValue)}, null, null, null);
-        return convertToBook(results);
+        return convertToBookList(results);
     }
 
     /**
@@ -138,7 +137,7 @@ public class LibraryDBDao implements Serializable {
      * @param map
      * @return
      */
-    public Book searchBook(HashMap<String, String> map) {
+    public List<Book> searchBooks(HashMap<String, String> map) {
         Set set = map.keySet();
         Iterator iterator = set.iterator();
         StringBuffer sb = new StringBuffer();
@@ -151,7 +150,6 @@ public class LibraryDBDao implements Serializable {
                 sb.append(" and ");
             }
         }
-        Log.d("test", "keysets" + sb.toString());
         String[] strs = new String[valueList.size()];
         Cursor results = getDataBaseHelper().query(SQLConstant.TABLE_BOOK,
                 new String[]{SQLConstant.KEY_ID, SQLConstant.KEY_BOOK_NAME,
@@ -159,7 +157,7 @@ public class LibraryDBDao implements Serializable {
                         SQLConstant.KEY_PUBLICATION_DATE,
                         SQLConstant.KEY_PRICE, SQLConstant.KEY_TYPE},
                 sb.toString(), valueList.toArray(strs), null, null, null);
-        return convertToBook(results);
+        return convertToBookList(results);
     }
 
     /**

@@ -152,7 +152,7 @@ public class InputFragment extends Fragment {
         }
         else {
             Book book = makeBook();
-            if(mDao.searchBook(SQLConstant.KEY_ID, String.valueOf(book.getId()))!=null){
+            if(mDao.searchBooks(SQLConstant.KEY_ID, String.valueOf(book.getId()))!=null){
                 Toast.makeText(getActivity(), "图书编号已被占用，请修改！！！", Toast.LENGTH_SHORT).show();
             }
             else {
