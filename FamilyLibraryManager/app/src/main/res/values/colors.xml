@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!-- 黑色 -->
+    <color name="black">#666666</color>
+    <!-- 黑色加深 -->
+    <color name="black_dark">#1C1C1B</color>
+
+    <color name="line">#E6E6E6</color>
+</resources>
