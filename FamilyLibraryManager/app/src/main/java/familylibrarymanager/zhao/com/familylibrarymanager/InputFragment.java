@@ -1,11 +1,10 @@
 package familylibrarymanager.zhao.com.familylibrarymanager;
 
 import android.app.DatePickerDialog;
-import android.app.Fragment;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 import familylibrarymanager.zhao.com.familylibrarymanager.bean.Book;
-import familylibrarymanager.zhao.com.familylibrarymanager.constant.IntentConstant;
 import familylibrarymanager.zhao.com.familylibrarymanager.constant.SQLConstant;
 import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
 
@@ -27,7 +25,6 @@ import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link InputFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link InputFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -51,19 +48,16 @@ public class InputFragment extends Fragment {
      *
      * @return A new instance of fragment InputFragment.
      */
-    public static InputFragment newInstance(LibraryDBDao dao) {
+    public static InputFragment newInstance() {
         InputFragment fragment = new InputFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(IntentConstant.INTENT_DAO, dao);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mDao = (LibraryDBDao) getArguments().getSerializable(IntentConstant.INTENT_DAO);
+        if (mListener!= null) {
+            mDao = mListener.getDao();
         }
         showDate = Calendar.getInstance();
     }
@@ -120,21 +114,6 @@ public class InputFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 
     @Override
