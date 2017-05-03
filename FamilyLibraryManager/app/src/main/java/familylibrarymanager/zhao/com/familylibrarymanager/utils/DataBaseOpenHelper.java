@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.Map;
  * Person in charge :  zouyulong
  */
 
-public class DataBaseOpenHelper extends SQLiteOpenHelper {
+public class DataBaseOpenHelper extends SQLiteOpenHelper implements Serializable {
     private static Map<String, DataBaseOpenHelper> dbMaps = new HashMap<String, DataBaseOpenHelper>();
     private OnSqliteUpdateListener onSqliteUpdateListener;
     /**

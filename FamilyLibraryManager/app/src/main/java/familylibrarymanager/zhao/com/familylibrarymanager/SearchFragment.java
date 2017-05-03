@@ -1,23 +1,21 @@
 package familylibrarymanager.zhao.com.familylibrarymanager;
 
-import android.app.Fragment;
-import android.net.Uri;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import familylibrarymanager.zhao.com.familylibrarymanager.constant.IntentConstant;
 import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SearchFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link SearchFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -35,19 +33,16 @@ public class SearchFragment extends Fragment {
      *
      * @return A new instance of fragment SearchFragment.
      */
-    public static SearchFragment newInstance(LibraryDBDao dao) {
+    public static SearchFragment newInstance() {
         SearchFragment fragment = new SearchFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(IntentConstant.INTENT_DAO, dao);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mDao = (LibraryDBDao) getArguments().getSerializable(IntentConstant.INTENT_DAO);
+        if (mListener != null) {
+            mDao = mListener.getDao();
         }
     }
 
@@ -64,21 +59,6 @@ public class SearchFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -89,5 +69,16 @@ public class SearchFragment extends Fragment {
                 Toast.makeText(getActivity(), "搜索成功", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof familylibrarymanager.zhao.com.familylibrarymanager.OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 }
