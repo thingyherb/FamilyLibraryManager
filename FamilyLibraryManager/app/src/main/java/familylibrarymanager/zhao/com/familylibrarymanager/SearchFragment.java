@@ -1,21 +1,26 @@
 package familylibrarymanager.zhao.com.familylibrarymanager;
 
+import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.app.Fragment;
 
-import java.sql.Date;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 
 import familylibrarymanager.zhao.com.familylibrarymanager.constant.IntentConstant;
+import familylibrarymanager.zhao.com.familylibrarymanager.constant.SQLConstant;
 import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
 
 
@@ -29,6 +34,17 @@ import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
  */
 public class SearchFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
+
+    private EditText bookNumberEditText;
+    private EditText bookNameEditText;
+    private EditText bookAuthorEditText;
+    private EditText bookTypeEditText;
+    private EditText bookDateEditText;
+    private EditText bookPriceEditText;
+    private EditText bookBorrowerEditText;
+
+    private Calendar showDate;
+
     private LibraryDBDao mDao;
     public SearchFragment() {
         // Required empty public constructor
@@ -54,13 +70,69 @@ public class SearchFragment extends Fragment {
         if (getArguments() != null) {
             mDao = (LibraryDBDao) getArguments().getSerializable(IntentConstant.INTENT_DAO);
         }
+        showDate = Calendar.getInstance();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false);
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
+        bookNumberEditText = (EditText) view.findViewById(R.id.bookNumberEditText);
+        bookNameEditText = (EditText) view.findViewById(R.id.bookNameEditText);
+        bookAuthorEditText = (EditText) view.findViewById(R.id.bookAuthorEditText);
+        bookTypeEditText = (EditText) view.findViewById(R.id.bookTypeEditText);
+        bookDateEditText = (EditText) view.findViewById(R.id.bookDateEditText);
+        bookPriceEditText = (EditText) view.findViewById(R.id.bookPriceEditText);
+        bookBorrowerEditText = (EditText) view.findViewById(R.id.bookBorrowerEditText);
+        bookDateEditText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                onClickPublicationTime();
+                return true;
+            }
+        });
+        View searchButton = view.findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickSearch();
+            }
+        });
+
+
+        return view;
+    }
+    /**
+     * 点击选择出版时间
+     *
+     */
+    public void onClickPublicationTime() {
+        String publicationDateStr = bookDateEditText.getText().toString();
+        if (!TextUtils.isEmpty(publicationDateStr)&&publicationDateStr.contains("-")) {
+            String[] split = publicationDateStr.split("-");
+            showDate.set(Integer.parseInt(split[0]),
+                    Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+        }
+        else{
+            showDate.setTimeInMillis(System.currentTimeMillis());
+        }
+        showDatePickerDialog();
+    }
+
+    /**
+     * 显示时间捡取器
+     */
+    private void showDatePickerDialog() {
+        new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                showDate.set(Calendar.YEAR, year);
+                showDate.set(Calendar.MONTH, monthOfYear);
+                showDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                bookDateEditText.setText(DateFormat.format("yyyy-MM-dd", showDate));
+            }
+        }, showDate.get(Calendar.YEAR), showDate.get(Calendar.MONTH), showDate.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     @Override
@@ -84,52 +156,55 @@ public class SearchFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Button searchButton = (Button)getActivity().findViewById(R.id.searchButton);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //获取输入框内容，全部为空提示异常
-                //图书编号
-                EditText bookid = (EditText)getActivity().findViewById(R.id.bookNumberEditText);
-                //图书名称
-                EditText bookname = (EditText)getActivity().findViewById(R.id.bookNameEditText);
-                String name = bookname.getText().toString();
-                //作者
-                EditText bookauth = (EditText)getActivity().findViewById(R.id.bookAuthorEditText);
-                String auth = bookauth.getText().toString();
-                //类型
-                EditText booktype = (EditText)getActivity().findViewById(R.id.bookTypeEditText);
-                String type = booktype.getText().toString();
-                //出版日期
-                EditText bookdate = (EditText) getActivity().findViewById(R.id.bookDateEditText);
-                //Date.parse(bookdate.getText().toString());
-                //单价Decimal
-                EditText bookprice= (EditText)getActivity().findViewById(R.id.bookPriceEditText);
-                String priceStr = bookprice.getText().toString();
-                Double price;
-                if("".equals(priceStr)){
-                    price = 0.0;
-                }else{
-                    price = Double.valueOf(priceStr);
-                }
+    /**
+     * 搜索按钮点击事件
+     */
+    public void onClickSearch(){
+        //获取输入框内容，全部为空提示异常
+        HashMap searchMap = new HashMap();
+//        Intent intent = new Intent();
+//            //图书编号
+        if(!TextUtils.isEmpty(bookNumberEditText.getText().toString()))
+            searchMap.put(SQLConstant.KEY_ID, bookNumberEditText.getText().toString());
+//            intent.putExtra("bookId",bookid.getText().toString());
+            //图书名称
+        if(!TextUtils.isEmpty(bookNameEditText.getText().toString()))
+                searchMap.put(SQLConstant.KEY_BOOK_NAME, bookNameEditText.getText().toString());
+//                intent.putExtra("bookname", bookNameEditText.getText().toString());
+            //作者
+        if(!TextUtils.isEmpty(bookAuthorEditText.getText().toString()))
+            searchMap.put(SQLConstant.KEY_AUTHOR,bookAuthorEditText.getText().toString());
+//            intent.putExtra("author",bookauth.getText().toString());
+            //类型
+        if(!TextUtils.isEmpty(bookTypeEditText.getText().toString()))
+            searchMap.put(SQLConstant.KEY_TYPE,bookTypeEditText.getText().toString());
+//                intent.putExtra("type",booktype.getText().toString());
+            //出版日期
+        if(!TextUtils.isEmpty(bookDateEditText.getText().toString()))
+            searchMap.put(SQLConstant.KEY_PUBLICATION_DATE,bookDateEditText.getText().toString());
+//            intent.putExtra("publicationDate",bookdate.getText().toString());
+            //单价Decimal
+        if(!TextUtils.isEmpty(bookPriceEditText.getText().toString()))
+            searchMap.put(SQLConstant.KEY_PRICE,bookPriceEditText.getText().toString());
+//            intent.putExtra("price",priceStr);
+            //借阅人
+        if(!TextUtils.isEmpty(bookBorrowerEditText.getText().toString()))
+            searchMap.put(SQLConstant.KEY_BORROWER,bookBorrowerEditText.getText().toString());
+//            intent.putExtra("borrower",bookborrower.getText().toString());
 
-                //借阅人
-                EditText bookborrower= (EditText)getActivity().findViewById(R.id.bookBorrowerEditText);
-                String borrower = bookborrower.getText().toString();
+        if(searchMap!=null && !searchMap.isEmpty()){
+            List booklist = mDao.searchBooks(searchMap);
 
-                //根据输入框到库中查询
-
-                //返回结果
-                Toast.makeText(getActivity(), borrower, Toast.LENGTH_SHORT).show();
-                Toast.makeText(getActivity(), price.toString(), Toast.LENGTH_SHORT).show();
-
-
-                Toast.makeText(getActivity(), "搜索00成功", Toast.LENGTH_SHORT).show();
-
+            if(null!=booklist && booklist.size()>0){
+                Toast.makeText(getActivity(), "success，数量是"+booklist.size(), Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(getActivity(), "没有搜索到相关书籍！", Toast.LENGTH_SHORT).show();
             }
-        });
+        }else{
+            Toast.makeText(getActivity(), "请输入至少一个搜索信息", Toast.LENGTH_SHORT).show();
+        }
+//            intent.setClass(getActivity().getApplicationContext(),SearchBookActivity.class);
+//            startActivity(intent);
+
     }
 }
