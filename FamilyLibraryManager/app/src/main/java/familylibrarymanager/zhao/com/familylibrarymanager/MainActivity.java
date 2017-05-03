@@ -1,9 +1,8 @@
 package familylibrarymanager.zhao.com.familylibrarymanager;
 
-import android.app.FragmentManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +12,7 @@ import android.widget.RadioButton;
 import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
 
 
-public class MainActivity extends AppCompatActivity implements InputFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
     // Fragment管理器
     private FragmentManager fragmentManager;
@@ -21,17 +20,17 @@ public class MainActivity extends AppCompatActivity implements InputFragment.OnF
     private InputFragment inputFragment;
     private ListFragment  listFragment;
     private SearchFragment searchFragment;
-    LibraryDBDao mDao;
+    private LibraryDBDao mDao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mDao = new LibraryDBDao(this);
-        inputFragment = InputFragment.newInstance(mDao);
-        listFragment = ListFragment.newInstance(mDao);
-        searchFragment = SearchFragment.newInstance(mDao);
+        inputFragment = InputFragment.newInstance();
+        listFragment = ListFragment.newInstance();
+        searchFragment = SearchFragment.newInstance();
         // 获取Fragment管理器
-        this.fragmentManager = this.getFragmentManager();
+        this.fragmentManager = this.getSupportFragmentManager();
         // 设置默认显示的fragment
         this.fragmentManager.beginTransaction().replace(R.id.fragmentContainer , this.inputFragment).commit();
         RadioButton inputButton = (RadioButton)findViewById(R.id.tabBar_firstBtn);
@@ -111,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements InputFragment.OnF
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public LibraryDBDao getDao() {
+        return mDao;
     }
 }
