@@ -229,4 +229,18 @@ public class LibraryDBDao implements Serializable {
         }
         return book;
     }
+    /**
+     * 获取未被使用的key id
+     */
+    public String getNotOccupiedKeyId(){
+        int key = 0;
+        while (true)
+        {
+            if (searchBooks(SQLConstant.KEY_ID, String.valueOf(key)) == null) {
+                //KEY ID 未被占用。
+                return String.valueOf(key);
+            }
+            key++;
+        }
+    }
 }
