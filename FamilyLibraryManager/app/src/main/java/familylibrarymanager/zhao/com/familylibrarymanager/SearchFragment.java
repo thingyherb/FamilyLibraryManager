@@ -1,15 +1,16 @@
 package familylibrarymanager.zhao.com.familylibrarymanager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
-
+import android.widget.EditText;
 import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
 
 
@@ -22,6 +23,15 @@ import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
  */
 public class SearchFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
+
+    private EditText bookNumberSearchText;
+    private EditText bookNameSearchText;
+    private EditText bookAuthorSearchText;
+    private EditText bookTypeSearchText;
+    private EditText bookDateSearchText;
+    private EditText bookPriceSearchText;
+    private EditText bookBorrowerSearchText;
+
     private LibraryDBDao mDao;
     public SearchFragment() {
         // Required empty public constructor
@@ -49,8 +59,44 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false);
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
+        initView(view);
+        return view;
+    }
+
+    private void initView(View view) {
+        bookNumberSearchText = (EditText) view.findViewById(R.id.bookNumberSearchText);
+        bookNameSearchText = (EditText) view.findViewById(R.id.bookNameSearchText);
+        bookAuthorSearchText = (EditText) view.findViewById(R.id.bookAuthorSearchText);
+        bookTypeSearchText = (EditText) view.findViewById(R.id.bookTypeSearchText);
+        bookDateSearchText = (EditText) view.findViewById(R.id.bookDateSearchText);
+        bookPriceSearchText = (EditText) view.findViewById(R.id.bookPriceSearchText);
+        bookBorrowerSearchText = (EditText) view.findViewById(R.id.bookBorrowerSearchText);
+        View searchButton = view.findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickSearch();
+            }
+        });
+    }
+
+    /**
+     * 点击搜索按钮
+     *
+     */
+    public void onClickSearch() {
+        Intent intent = new Intent(getActivity(), SearchBookActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("bookId", bookNumberSearchText.getText().toString());
+        bundle.putSerializable("bookname", bookNameSearchText.getText().toString());
+        bundle.putSerializable("type", bookTypeSearchText.getText().toString());
+        bundle.putSerializable("author", bookAuthorSearchText.getText().toString());
+        bundle.putSerializable("price", bookPriceSearchText.getText().toString());
+        bundle.putSerializable("borrower", bookBorrowerSearchText.getText().toString());
+        bundle.putSerializable("publicationDate", bookDateSearchText.getText().toString());
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override
@@ -62,13 +108,6 @@ public class SearchFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Button searchButton = (Button)getActivity().findViewById(R.id.searchButton);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "搜索成功", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override

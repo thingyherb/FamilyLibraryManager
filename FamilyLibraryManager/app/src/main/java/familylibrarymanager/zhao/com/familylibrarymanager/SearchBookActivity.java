@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import familylibrarymanager.zhao.com.familylibrarymanager.adapter.BookAdapter;
@@ -15,7 +13,7 @@ import familylibrarymanager.zhao.com.familylibrarymanager.bean.Book;
 import familylibrarymanager.zhao.com.familylibrarymanager.constant.SQLConstant;
 import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
 
-public class SearchBookActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
+public class SearchBookActivity extends AppCompatActivity implements AdapterView.OnItemClickListener,View.OnClickListener{
 
     private ListView lvBook;
 
@@ -39,7 +37,10 @@ public class SearchBookActivity extends AppCompatActivity implements AdapterView
         bookAdapter = new BookAdapter(SearchBookActivity.this,books);
         lvBook.setAdapter(bookAdapter);
         lvBook.setOnItemClickListener(this);
+        View searchBack = findViewById(R.id.search_back);
+        searchBack.setOnClickListener(this);
     }
+
 
     /**
      * 获得搜索条件
@@ -87,5 +88,10 @@ public class SearchBookActivity extends AppCompatActivity implements AdapterView
         intent.putExtras(bundle);
         this.startActivity(intent);
         //Toast.makeText(SearchBookActivity.this,books.get(position).getBookname(),Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        finish();
     }
 }
