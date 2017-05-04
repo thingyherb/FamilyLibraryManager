@@ -2,6 +2,8 @@ package familylibrarymanager.zhao.com.familylibrarymanager;
 
 import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -161,50 +163,52 @@ public class SearchFragment extends Fragment {
      */
     public void onClickSearch(){
         //获取输入框内容，全部为空提示异常
-        HashMap searchMap = new HashMap();
-//        Intent intent = new Intent();
+//        HashMap searchMap = new HashMap();
+        Intent intent = new Intent();
 //            //图书编号
         if(!TextUtils.isEmpty(bookNumberEditText.getText().toString()))
-            searchMap.put(SQLConstant.KEY_ID, bookNumberEditText.getText().toString());
-//            intent.putExtra("bookId",bookid.getText().toString());
+//            searchMap.put(SQLConstant.KEY_ID, bookNumberEditText.getText().toString());
+            intent.putExtra("bookId",bookNumberEditText.getText().toString());
             //图书名称
         if(!TextUtils.isEmpty(bookNameEditText.getText().toString()))
-                searchMap.put(SQLConstant.KEY_BOOK_NAME, bookNameEditText.getText().toString());
-//                intent.putExtra("bookname", bookNameEditText.getText().toString());
+//                searchMap.put(SQLConstant.KEY_BOOK_NAME, bookNameEditText.getText().toString());
+                intent.putExtra("bookname", bookNameEditText.getText().toString());
             //作者
         if(!TextUtils.isEmpty(bookAuthorEditText.getText().toString()))
-            searchMap.put(SQLConstant.KEY_AUTHOR,bookAuthorEditText.getText().toString());
-//            intent.putExtra("author",bookauth.getText().toString());
+//            searchMap.put(SQLConstant.KEY_AUTHOR,bookAuthorEditText.getText().toString());
+            intent.putExtra("author",bookAuthorEditText.getText().toString());
             //类型
         if(!TextUtils.isEmpty(bookTypeEditText.getText().toString()))
-            searchMap.put(SQLConstant.KEY_TYPE,bookTypeEditText.getText().toString());
-//                intent.putExtra("type",booktype.getText().toString());
+//            searchMap.put(SQLConstant.KEY_TYPE,bookTypeEditText.getText().toString());
+                intent.putExtra("type",bookTypeEditText.getText().toString());
             //出版日期
         if(!TextUtils.isEmpty(bookDateEditText.getText().toString()))
-            searchMap.put(SQLConstant.KEY_PUBLICATION_DATE,bookDateEditText.getText().toString());
-//            intent.putExtra("publicationDate",bookdate.getText().toString());
+//            searchMap.put(SQLConstant.KEY_PUBLICATION_DATE,bookDateEditText.getText().toString());
+            intent.putExtra("publicationDate",bookDateEditText.getText().toString());
             //单价Decimal
         if(!TextUtils.isEmpty(bookPriceEditText.getText().toString()))
-            searchMap.put(SQLConstant.KEY_PRICE,bookPriceEditText.getText().toString());
-//            intent.putExtra("price",priceStr);
+//            searchMap.put(SQLConstant.KEY_PRICE,bookPriceEditText.getText().toString());
+            intent.putExtra("price",bookPriceEditText.getText().toString());
             //借阅人
         if(!TextUtils.isEmpty(bookBorrowerEditText.getText().toString()))
-            searchMap.put(SQLConstant.KEY_BORROWER,bookBorrowerEditText.getText().toString());
-//            intent.putExtra("borrower",bookborrower.getText().toString());
+//            searchMap.put(SQLConstant.KEY_BORROWER,bookBorrowerEditText.getText().toString());
+            intent.putExtra("borrower",bookBorrowerEditText.getText().toString());
 
-        if(searchMap!=null && !searchMap.isEmpty()){
-            List booklist = mDao.searchBooks(searchMap);
+//        if(searchMap!=null && !searchMap.isEmpty()){
 
-            if(null!=booklist && booklist.size()>0){
-                Toast.makeText(getActivity(), "success，数量是"+booklist.size(), Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(getActivity(), "没有搜索到相关书籍！", Toast.LENGTH_SHORT).show();
-            }
-        }else{
-            Toast.makeText(getActivity(), "请输入至少一个搜索信息", Toast.LENGTH_SHORT).show();
-        }
+        if (intent!=null && !intent.getExtras().isEmpty()){
+
 //            intent.setClass(getActivity().getApplicationContext(),SearchBookActivity.class);
 //            startActivity(intent);
 
+//            List booklist = mDao.searchBooks(searchMap);
+//            if(null!=booklist && booklist.size()>0){
+//                Toast.makeText(getActivity(), "success，数量是"+booklist.size(), Toast.LENGTH_SHORT).show();
+//            }else{
+//                Toast.makeText(getActivity(), "没有搜索到相关书籍！", Toast.LENGTH_SHORT).show();
+//            }
+        }else{
+            Toast.makeText(getActivity(), "请输入至少一个搜索信息", Toast.LENGTH_SHORT).show();
+        }
     }
 }
