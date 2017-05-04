@@ -1,5 +1,7 @@
 package familylibrarymanager.zhao.com.familylibrarymanager;
 
+import android.content.Context;
+import android.content.Intent;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,14 +15,14 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-
 import familylibrarymanager.zhao.com.familylibrarymanager.constant.IntentConstant;
 import familylibrarymanager.zhao.com.familylibrarymanager.constant.SQLConstant;
 import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
@@ -36,7 +38,13 @@ import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
  */
 public class SearchFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
-
+    private EditText bookNumberSearchText;
+    private EditText bookNameSearchText;
+    private EditText bookAuthorSearchText;
+    private EditText bookTypeSearchText;
+    private EditText bookDateSearchText;
+    private EditText bookPriceSearchText;
+    private EditText bookBorrowerSearchText;
     private EditText bookNumberEditText;
     private EditText bookNameEditText;
     private EditText bookAuthorEditText;
@@ -44,9 +52,7 @@ public class SearchFragment extends Fragment {
     private EditText bookDateEditText;
     private EditText bookPriceEditText;
     private EditText bookBorrowerEditText;
-
     private Calendar showDate;
-
     private LibraryDBDao mDao;
     public SearchFragment() {
         // Required empty public constructor
@@ -78,6 +84,18 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
+        initView(view);
+        return view;
+    }
+    private void initView(View view) {
+        bookNumberSearchText = (EditText) view.findViewById(R.id.bookNumberSearchText);
+        bookNameSearchText = (EditText) view.findViewById(R.id.bookNameSearchText);
+        bookAuthorSearchText = (EditText) view.findViewById(R.id.bookAuthorSearchText);
+        bookTypeSearchText = (EditText) view.findViewById(R.id.bookTypeSearchText);
+        bookDateSearchText = (EditText) view.findViewById(R.id.bookDateSearchText);
+        bookPriceSearchText = (EditText) view.findViewById(R.id.bookPriceSearchText);
+        bookBorrowerSearchText = (EditText) view.findViewById(R.id.bookBorrowerSearchText);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         bookNumberEditText = (EditText) view.findViewById(R.id.bookNumberEditText);
@@ -101,7 +119,24 @@ public class SearchFragment extends Fragment {
                 onClickSearch();
             }
         });
+    }
 
+    /**
+     * 点击搜索按钮
+     *
+     */
+    public void onClickSearch() {
+        Intent intent = new Intent(getActivity(), SearchBookActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("bookId", bookNumberSearchText.getText().toString());
+        bundle.putSerializable("bookname", bookNameSearchText.getText().toString());
+        bundle.putSerializable("type", bookTypeSearchText.getText().toString());
+        bundle.putSerializable("author", bookAuthorSearchText.getText().toString());
+        bundle.putSerializable("price", bookPriceSearchText.getText().toString());
+        bundle.putSerializable("borrower", bookBorrowerSearchText.getText().toString());
+        bundle.putSerializable("publicationDate", bookDateSearchText.getText().toString());
+        intent.putExtras(bundle);
+        startActivity(intent);
 
         return view;
     }
@@ -143,6 +178,9 @@ public class SearchFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
