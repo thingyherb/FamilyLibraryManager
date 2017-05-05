@@ -72,6 +72,9 @@ public class InputFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_input, container, false);
         initView(view);
+        String newKeyId=mDao.getNotOccupiedKeyId();
+        bookNumberEditText.setText(newKeyId);
+        bookNumberEditText.setFocusable(false);
         return view;
     }
 
@@ -137,6 +140,8 @@ public class InputFragment extends Fragment {
             else {
                 if (mDao.addBook(book)) {
                     Toast.makeText(getActivity(), "添加图书成功！！！", Toast.LENGTH_SHORT).show();
+                    String newKeyId=mDao.getNotOccupiedKeyId();
+                    bookNumberEditText.setText(newKeyId);
                 } else {
                     Toast.makeText(getActivity(), "添加图书失败！！！", Toast.LENGTH_SHORT).show();
                 }
