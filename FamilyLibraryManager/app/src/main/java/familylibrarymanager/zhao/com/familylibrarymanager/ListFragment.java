@@ -53,20 +53,15 @@ public class ListFragment extends Fragment implements AdapterView.OnItemClickLis
      *
      * @return A new instance of fragment ListFragment.
      */
-    public static ListFragment newInstance(LibraryDBDao dao) {
+    public static ListFragment newInstance() {
         ListFragment fragment = new ListFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(IntentConstant.INTENT_DAO, dao);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mDao = (LibraryDBDao) getArguments().getSerializable(IntentConstant.INTENT_DAO);
-        }
+        mDao = new LibraryDBDao(this.getActivity());
     }
 
     @Override
@@ -81,6 +76,7 @@ public class ListFragment extends Fragment implements AdapterView.OnItemClickLis
     @Override
     public void onStart() {
         super.onStart();
+        data.clear();
         List<Book> list = mDao.queryAllBookList();
         if (list != null && list.size() > 0) {
             data.addAll(list);
@@ -111,10 +107,6 @@ public class ListFragment extends Fragment implements AdapterView.OnItemClickLis
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
     @Override
     public void onDetach() {
         super.onDetach();

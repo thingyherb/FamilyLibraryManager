@@ -95,6 +95,7 @@ public class InputFragment extends Fragment {
                 } else {
                     return false;
                 }
+
             }
         });
         View inputButton = view.findViewById(R.id.inputButton);

@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         setContentView(R.layout.activity_main);
         mDao = new LibraryDBDao(this);
         inputFragment = InputFragment.newInstance();
-        listFragment = ListFragment.newInstance(mDao);
+        listFragment = ListFragment.newInstance();
         searchFragment = SearchFragment.newInstance();
         // 获取Fragment管理器
         this.fragmentManager = this.getSupportFragmentManager();
