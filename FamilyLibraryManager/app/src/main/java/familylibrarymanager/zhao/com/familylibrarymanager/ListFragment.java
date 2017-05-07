@@ -148,7 +148,7 @@ public class ListFragment extends Fragment implements AdapterView.OnItemClickLis
         String borrower = data.get(position).getBorrower();
         String publicationDate = data.get(position).getPublicationDate();
         // 传参
-        Intent intent = new Intent(getActivity(), DetailsActivity.class);
+        Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putSerializable("bookId", bookId);
         bundle.putSerializable("bookName", bookname);
@@ -158,43 +158,7 @@ public class ListFragment extends Fragment implements AdapterView.OnItemClickLis
         bundle.putSerializable("borrower", borrower);
         bundle.putSerializable("publicationDate", publicationDate);
         intent.putExtras(bundle);
-        this.startActivity(intent);
-    }
-
-    /**
-     * 获得搜索条件
-     * @return
-     */
-    private HashMap<String, String> getSearchCondition(Intent intent) {
-        HashMap<String, String> search = new HashMap<String, String>();
-        String bookId = intent.getStringExtra("id");
-        String bookname = intent.getStringExtra("bookname");
-        String type = intent.getStringExtra("type");
-        String author = intent.getStringExtra("author");
-        String price = intent.getStringExtra("price");
-        String borrower = intent.getStringExtra("borrower");
-        String publicationDate = intent.getStringExtra("publicationDate");
-        if(null != bookId && !"".equals(bookId)){
-            search.put(SQLConstant.KEY_ID,bookId);
-        }
-        if(null != bookname && !"".equals(bookname)){
-            search.put(SQLConstant.KEY_BOOK_NAME,bookname);
-        }
-        if(null != type && !"".equals(type)){
-            search.put(SQLConstant.KEY_TYPE,type);
-        }
-        if(null != author && !"".equals(author)){
-            search.put(SQLConstant.KEY_AUTHOR,author);
-        }
-        if(null != price && !"".equals(price)){
-            search.put(SQLConstant.KEY_PRICE,price);
-        }
-        if(null != borrower && !"".equals(borrower)){
-            search.put(SQLConstant.KEY_BORROWER,borrower);
-        }
-        if(null != publicationDate && !"".equals(publicationDate)){
-            search.put(SQLConstant.KEY_PUBLICATION_DATE,publicationDate);
-        }
-        return search;
+        intent.setClass(getActivity().getApplicationContext(),DetailsActivity.class);
+        startActivity(intent);
     }
 }
