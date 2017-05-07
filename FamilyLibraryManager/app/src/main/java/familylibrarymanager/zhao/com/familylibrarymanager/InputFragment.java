@@ -89,8 +89,12 @@ public class InputFragment extends Fragment {
         bookDateEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                onClickPublicationTime();
-                return true;
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    onClickPublicationTime();
+                    return true;
+                } else {
+                    return false;
+                }
             }
         });
         View inputButton = view.findViewById(R.id.inputButton);

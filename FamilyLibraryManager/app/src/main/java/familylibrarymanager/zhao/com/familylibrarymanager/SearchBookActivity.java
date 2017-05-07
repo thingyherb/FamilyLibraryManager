@@ -50,7 +50,7 @@ public class SearchBookActivity extends AppCompatActivity implements AdapterView
      */
     private HashMap<String, String> getSearchCondition(Intent intent) {
         HashMap<String, String> search = new HashMap<String, String>();
-        String bookId = intent.getStringExtra("bookId");
+        String bookId = intent.getStringExtra("id");
         String bookname = intent.getStringExtra("bookname");
         String type = intent.getStringExtra("type");
         String author = intent.getStringExtra("author");
