@@ -6,8 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import java.util.HashMap;
 import java.util.List;
+
 import familylibrarymanager.zhao.com.familylibrarymanager.adapter.BookAdapter;
 import familylibrarymanager.zhao.com.familylibrarymanager.bean.Book;
 import familylibrarymanager.zhao.com.familylibrarymanager.constant.SQLConstant;
@@ -79,15 +81,21 @@ public class SearchBookActivity extends AppCompatActivity implements AdapterView
         return search;
     }
 
+    // 详情
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //@Todo
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, DetailsActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("bookId", books.get(position).getBookname());
+        bundle.putSerializable("bookId", books.get(position).getId());
+        bundle.putSerializable("bookName", books.get(position).getBookname());
+        bundle.putSerializable("type", books.get(position).getType());
+        bundle.putSerializable("author", books.get(position).getAuthor());
+        bundle.putSerializable("price", books.get(position).getPrice());
+        bundle.putSerializable("borrower", books.get(position).getBorrower());
+        bundle.putSerializable("publicationDate", books.get(position).getPublicationDate());
         intent.putExtras(bundle);
         this.startActivity(intent);
-        //Toast.makeText(SearchBookActivity.this,books.get(position).getBookname(),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(SearchBookActivity.this,books.get(position).getBookname(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
