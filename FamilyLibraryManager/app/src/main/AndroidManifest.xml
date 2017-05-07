@@ -21,6 +21,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".DetailsActivity" />
+
         <uses-library android:name="android.test.runner" />
     </application>
 
