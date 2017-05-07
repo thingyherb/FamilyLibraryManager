@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioButton;
+import android.app.Fragment;
 
 import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
 
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         setContentView(R.layout.activity_main);
         mDao = new LibraryDBDao(this);
         inputFragment = InputFragment.newInstance();
-        listFragment = ListFragment.newInstance();
+        listFragment = ListFragment.newInstance(mDao);
         searchFragment = SearchFragment.newInstance();
         // 获取Fragment管理器
         this.fragmentManager = this.getSupportFragmentManager();

@@ -5,9 +5,16 @@
     tools:context="familylibrarymanager.zhao.com.familylibrarymanager.ListFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="list_fragment" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.ListViewCompat
+            android:id="@+id/list_books"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>
