@@ -43,6 +43,13 @@ public class SearchBookActivity extends AppCompatActivity implements AdapterView
         searchBack.setOnClickListener(this);
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        books = mDao.searchBooks(searchMap);
+        bookAdapter = new BookAdapter(SearchBookActivity.this,books);
+        lvBook.setAdapter(bookAdapter);
+    }
 
     /**
      * 获得搜索条件
@@ -50,7 +57,7 @@ public class SearchBookActivity extends AppCompatActivity implements AdapterView
      */
     private HashMap<String, String> getSearchCondition(Intent intent) {
         HashMap<String, String> search = new HashMap<String, String>();
-        String bookId = intent.getStringExtra("bookId");
+        String bookId = intent.getStringExtra("id");
         String bookname = intent.getStringExtra("bookname");
         String type = intent.getStringExtra("type");
         String author = intent.getStringExtra("author");
@@ -95,7 +102,6 @@ public class SearchBookActivity extends AppCompatActivity implements AdapterView
         bundle.putSerializable("publicationDate", books.get(position).getPublicationDate());
         intent.putExtras(bundle);
         this.startActivity(intent);
-//        Toast.makeText(SearchBookActivity.this,books.get(position).getBookname(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

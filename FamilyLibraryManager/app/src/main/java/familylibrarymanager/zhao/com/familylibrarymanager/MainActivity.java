@@ -1,5 +1,6 @@
 package familylibrarymanager.zhao.com.familylibrarymanager;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.RadioButton;
 import android.app.Fragment;
 
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         setContentView(R.layout.activity_main);
         mDao = new LibraryDBDao(this);
         inputFragment = InputFragment.newInstance();
-        listFragment = ListFragment.newInstance(mDao);
+        listFragment = ListFragment.newInstance();
         searchFragment = SearchFragment.newInstance();
         // 获取Fragment管理器
         this.fragmentManager = this.getSupportFragmentManager();
@@ -114,4 +116,5 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public LibraryDBDao getDao() {
         return mDao;
     }
+
 }

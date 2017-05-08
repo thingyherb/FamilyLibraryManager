@@ -1,5 +1,6 @@
 package familylibrarymanager.zhao.com.familylibrarymanager;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,13 +12,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import familylibrarymanager.zhao.com.familylibrarymanager.adapter.BookAdapter;
 import familylibrarymanager.zhao.com.familylibrarymanager.bean.Book;
 import familylibrarymanager.zhao.com.familylibrarymanager.constant.IntentConstant;
+import familylibrarymanager.zhao.com.familylibrarymanager.constant.SQLConstant;
 import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
 
 
@@ -29,7 +33,7 @@ import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
  * Use the {@link ListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment implements AdapterView.OnItemClickListener {
     //数据库操作变量
     private LibraryDBDao mDao;
 
@@ -49,20 +53,15 @@ public class ListFragment extends Fragment {
      *
      * @return A new instance of fragment ListFragment.
      */
-    public static ListFragment newInstance(LibraryDBDao dao) {
+    public static ListFragment newInstance() {
         ListFragment fragment = new ListFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(IntentConstant.INTENT_DAO, dao);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mDao = (LibraryDBDao) getArguments().getSerializable(IntentConstant.INTENT_DAO);
-        }
+        mDao = new LibraryDBDao(this.getActivity());
     }
 
     @Override
@@ -72,6 +71,18 @@ public class ListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         initView(view);
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        data.clear();
+        List<Book> list = mDao.queryAllBookList();
+        if (list != null && list.size() > 0) {
+            data.addAll(list);
+        }
+        bookAdapter = new BookAdapter(getActivity(), data);
+        list_books.setAdapter(bookAdapter);
     }
 
     private void initView(View view) {
@@ -84,6 +95,7 @@ public class ListFragment extends Fragment {
         }
         bookAdapter = new BookAdapter(getActivity(), data);
         list_books.setAdapter(bookAdapter);
+        list_books.setOnItemClickListener(this);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -95,10 +107,6 @@ public class ListFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
     @Override
     public void onDetach() {
         super.onDetach();
@@ -118,5 +126,31 @@ public class ListFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    // 详情
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // 图书
+        String bookId = data.get(position).getId();
+        String bookname = data.get(position).getBookname();
+        String type = data.get(position).getType();
+        String author = data.get(position).getAuthor();
+        Double price =  data.get(position).getPrice();
+        String borrower = data.get(position).getBorrower();
+        String publicationDate = data.get(position).getPublicationDate();
+        // 传参
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("bookId", bookId);
+        bundle.putSerializable("bookName", bookname);
+        bundle.putSerializable("type", type);
+        bundle.putSerializable("author", author);
+        bundle.putSerializable("price", price);
+        bundle.putSerializable("borrower", borrower);
+        bundle.putSerializable("publicationDate", publicationDate);
+        intent.putExtras(bundle);
+        intent.setClass(getActivity().getApplicationContext(),DetailsActivity.class);
+        startActivity(intent);
     }
 }

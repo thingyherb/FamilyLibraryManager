@@ -1,14 +1,21 @@
 package familylibrarymanager.zhao.com.familylibrarymanager;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 import familylibrarymanager.zhao.com.familylibrarymanager.bean.Book;
 import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
@@ -27,37 +34,29 @@ import static familylibrarymanager.zhao.com.familylibrarymanager.R.id.bookTypeEd
 public class DetailsActivity extends AppCompatActivity {
     LibraryDBDao mDao;
     private TextView dateEdit;
+    private EditText bookDateEditText;
+    private Calendar showDate;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.details);
-
         Intent intent = getIntent();
         // 拿书
         getBook(intent);
-
-//        // 日期校验
-//        dateEdit = (TextView) findViewById(R.id.bookDateEditText);
-//        dateEdit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(DetailsActivity.this, "日期", Toast.LENGTH_SHORT).show();
-//                String showDate = dateEdit.getText().toString();
-//                new DatePickerDialog(DetailsActivity.this, new DatePickerDialog.OnDateSetListener() {
-//                    @Override
-//                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//                        final String showDate = dateEdit.getText().toString();
-//                        showDate.set(Calendar.YEAR, year);
-//                        showDate.set(Calendar.MONTH, monthOfYear);
-//                        showDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-//                        bookDateEditText.setText(DateFormat.format("yyyy-MM-dd", showDate));
-//                    }
-//                }, showDate.get(Calendar.YEAR), showDate.get(Calendar.MONTH), showDate.get(Calendar.DAY_OF_MONTH)).show();
-//
-//            }
-//        });
-
+        showDate = Calendar.getInstance();
+        bookDateEditText = (EditText)this.findViewById(R.id.bookDateEditText);
+        bookDateEditText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    onClickPublicationTime();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
         // 更新
         Button updateButton = (Button) findViewById(R.id.updateButton);
         updateButton.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +91,38 @@ public class DetailsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 点击选择出版时间
+     *
+     */
+    public void onClickPublicationTime() {
+        String publicationDateStr = bookDateEditText.getText().toString();
+        if (!TextUtils.isEmpty(publicationDateStr)&&publicationDateStr.contains("-")) {
+            String[] split = publicationDateStr.split("-");
+            showDate.set(Integer.parseInt(split[0]),
+                    Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+        }
+        else{
+            showDate.setTimeInMillis(System.currentTimeMillis());
+        }
+        showDatePickerDialog();
+    }
+
+    /**
+     * 显示时间捡取器
+     */
+    private void showDatePickerDialog() {
+        new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                showDate.set(Calendar.YEAR, year);
+                showDate.set(Calendar.MONTH, monthOfYear);
+                showDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                bookDateEditText.setText(DateFormat.format("yyyy-MM-dd", showDate));
+            }
+        }, showDate.get(Calendar.YEAR), showDate.get(Calendar.MONTH), showDate.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
     private void getBook(Intent intent) {
         String bookId = intent.getStringExtra("bookId");
         Double price = intent.getDoubleExtra("price", 0.00);
@@ -107,9 +138,8 @@ public class DetailsActivity extends AppCompatActivity {
         priceTextView.setText(price.toString());
         TextView borrowerTextView = (TextView) findViewById(R.id.bookBorrowerEditText);
         borrowerTextView.setText(intent.getStringExtra("borrower"));
-        TextView publicationDateTextView = (TextView) findViewById(bookDateEditText);
+        TextView publicationDateTextView = (TextView) findViewById(R.id.bookDateEditText);
         publicationDateTextView.setText(intent.getStringExtra("publicationDate"));
-//        Toast.makeText(DetailsActivity.this, "bookId="+bookId, Toast.LENGTH_SHORT).show();
     }
 
     private void updateBook(Intent intent) {
@@ -121,9 +151,8 @@ public class DetailsActivity extends AppCompatActivity {
         TextView authorTextView = (TextView) findViewById(bookAuthorEditText);
         TextView priceTextView = (TextView) findViewById(bookPriceEditText);
         TextView borrowerTextView = (TextView) findViewById(R.id.bookBorrowerEditText);
-        TextView publicationDateTextView = (TextView) findViewById(bookDateEditText);
-
-//        Toast.makeText(DetailsActivity.this, "更新bookId="+bookId+",bookName="+bookName, Toast.LENGTH_SHORT).show();
+        TextView publicationDateTextView = (TextView) findViewById(R.id.bookDateEditText);
+        // new book
         Book book = new Book();
         book.setId(bookId);
         book.setBookname(bookNameTextView.getText().toString());

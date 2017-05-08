@@ -82,8 +82,12 @@ public class SearchFragment extends Fragment {
         bookDateEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                onClickPublicationTime();
-                return true;
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    onClickPublicationTime();
+                    return true;
+                } else {
+                    return false;
+                }
             }
         });
         View searchButton = view.findViewById(R.id.searchButton);
@@ -128,8 +132,6 @@ public class SearchFragment extends Fragment {
         }, showDate.get(Calendar.YEAR), showDate.get(Calendar.MONTH), showDate.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-
-
     /**
      * 搜索按钮点击事件
      */
@@ -157,24 +159,13 @@ public class SearchFragment extends Fragment {
         if(!TextUtils.isEmpty(bookBorrowerEditText.getText().toString()))
             intent.putExtra(SQLConstant.KEY_BORROWER,bookBorrowerEditText.getText().toString());
 
-
-        if (intent!=null && !intent.getExtras().isEmpty()){
-
+        if (intent!=null && intent.getExtras() != null) {
             intent.setClass(getActivity().getApplicationContext(),SearchBookActivity.class);
             startActivity(intent);
-
         }else{
             Toast.makeText(getActivity(), "请输入至少一个搜索信息", Toast.LENGTH_SHORT).show();
         }
     }
-
-
-
-
-
-
-
-
 
     @Override
     public void onDetach() {
