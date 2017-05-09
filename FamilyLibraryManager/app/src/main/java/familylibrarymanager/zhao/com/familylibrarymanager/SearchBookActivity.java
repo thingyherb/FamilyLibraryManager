@@ -63,7 +63,7 @@ public class SearchBookActivity extends AppCompatActivity implements AdapterView
         String author = intent.getStringExtra("author");
         String price = intent.getStringExtra("price");
         String borrower = intent.getStringExtra("borrower");
-        String publicationDate = intent.getStringExtra("publicationDate");
+        String publicationDate = intent.getStringExtra("publication_date");
         if(null != bookId && !"".equals(bookId)){
             search.put(SQLConstant.KEY_ID,bookId);
         }
