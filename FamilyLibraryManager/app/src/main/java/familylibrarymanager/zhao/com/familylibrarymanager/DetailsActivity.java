@@ -88,6 +88,12 @@ public class DetailsActivity extends AppCompatActivity {
                 finish();
             }
         });
+        findViewById(R.id.iv_finish).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     /**
@@ -184,9 +190,11 @@ public class DetailsActivity extends AppCompatActivity {
             isNotNull = false;
         } else if(TextUtils.isEmpty(((TextView) findViewById(bookPriceEditText)).getText())){
             isNotNull = false;
-        } else if(TextUtils.isEmpty(((TextView) findViewById(R.id.bookBorrowerEditText)).getText())){
-            isNotNull = false;
-        } else if(TextUtils.isEmpty(((TextView) findViewById(R.id.bookDateEditText)).getText())){
+        }
+//        else if(TextUtils.isEmpty(((TextView) findViewById(R.id.bookBorrowerEditText)).getText())){
+//            isNotNull = false;
+//        }
+        else if(TextUtils.isEmpty(((TextView) findViewById(R.id.bookDateEditText)).getText())){
             isNotNull = false;
         }
         return isNotNull;
