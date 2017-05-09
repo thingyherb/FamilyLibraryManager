@@ -163,7 +163,7 @@ public class InputFragment extends Fragment {
         if (!TextUtils.isEmpty(publicationDateStr)&&publicationDateStr.contains("-")) {
             String[] split = publicationDateStr.split("-");
             showDate.set(Integer.parseInt(split[0]),
-                    Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+                    Integer.parseInt(split[1])-1, Integer.parseInt(split[2]));
         }
         else{
             showDate.setTimeInMillis(System.currentTimeMillis());

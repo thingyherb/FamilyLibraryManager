@@ -1,11 +1,11 @@
 package familylibrarymanager.zhao.com.familylibrarymanager;
 
 import android.app.DatePickerDialog;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-import familylibrarymanager.zhao.com.familylibrarymanager.constant.IntentConstant;
 import familylibrarymanager.zhao.com.familylibrarymanager.constant.SQLConstant;
 import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
 
@@ -109,7 +108,7 @@ public class SearchFragment extends Fragment {
         if (!TextUtils.isEmpty(publicationDateStr)&&publicationDateStr.contains("-")) {
             String[] split = publicationDateStr.split("-");
             showDate.set(Integer.parseInt(split[0]),
-                    Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+                    Integer.parseInt(split[1])-1, Integer.parseInt(split[2]));
         }
         else{
             showDate.setTimeInMillis(System.currentTimeMillis());

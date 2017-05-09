@@ -21,7 +21,6 @@ import familylibrarymanager.zhao.com.familylibrarymanager.bean.Book;
 import familylibrarymanager.zhao.com.familylibrarymanager.dao.LibraryDBDao;
 
 import static familylibrarymanager.zhao.com.familylibrarymanager.R.id.bookAuthorEditText;
-import static familylibrarymanager.zhao.com.familylibrarymanager.R.id.bookDateEditText;
 import static familylibrarymanager.zhao.com.familylibrarymanager.R.id.bookNameEditText;
 import static familylibrarymanager.zhao.com.familylibrarymanager.R.id.bookNumberEditText;
 import static familylibrarymanager.zhao.com.familylibrarymanager.R.id.bookPriceEditText;
@@ -100,7 +99,7 @@ public class DetailsActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(publicationDateStr)&&publicationDateStr.contains("-")) {
             String[] split = publicationDateStr.split("-");
             showDate.set(Integer.parseInt(split[0]),
-                    Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+                    Integer.parseInt(split[1])-1, Integer.parseInt(split[2]));
         }
         else{
             showDate.setTimeInMillis(System.currentTimeMillis());
